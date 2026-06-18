@@ -191,6 +191,7 @@ function App() {
   const [projects, setProjects] = useState([]);
   const [activeFilter, setActiveFilter] = useState('Tümü');
   const [sortBy, setSortBy] = useState('created');
+  const [pinMode, setPinMode] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalMode, setModalMode] = useState('create');
@@ -2077,6 +2078,15 @@ function App() {
             ))}
           </select>
         </label>
+
+        <button
+          className={pinMode ? 'pinModeButton active' : 'pinModeButton'}
+          type="button"
+          onClick={() => setPinMode((current) => !current)}
+          title="Kartlarda sabitleme düğmelerini göster/gizle"
+        >
+          📌 Pinle
+        </button>
       </section>
 
       {isLoading ? (
@@ -2086,7 +2096,7 @@ function App() {
         </section>
       ) : (
         <>
-          <section className="projectGrid">
+          <section className={pinMode ? 'projectGrid pinModeOn' : 'projectGrid'}>
             {filteredProjects.map((project) => (
               <article
                 className="projectCard"
@@ -2104,15 +2114,17 @@ function App() {
                   onClick={(event) => openAssetMenu(event, 'projectBanner', project)}
                   title="Banner seçenekleri"
                 >
-                  <button
-                    className={project.pinned ? 'pinButton pinned' : 'pinButton'}
-                    type="button"
-                    onClick={(event) => handleTogglePin(event, project)}
-                    title={project.pinned ? 'Sabitlemeyi kaldır' : 'Sabitle'}
-                    aria-label={project.pinned ? 'Sabitlemeyi kaldır' : 'Sabitle'}
-                  >
-                    📌
-                  </button>
+                  {(pinMode || project.pinned) && (
+                    <button
+                      className={project.pinned ? 'pinButton pinned' : 'pinButton'}
+                      type="button"
+                      onClick={(event) => handleTogglePin(event, project)}
+                      title={project.pinned ? 'Sabitlemeyi kaldır' : 'Sabitle'}
+                      aria-label={project.pinned ? 'Sabitlemeyi kaldır' : 'Sabitle'}
+                    >
+                      📌
+                    </button>
+                  )}
                 </div>
 
                 <div className="projectBody">
