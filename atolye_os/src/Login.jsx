@@ -3,17 +3,14 @@ import './App.css';
 import { supabase } from './lib/supabaseClient';
 
 function Login() {
-  const [mode, setMode] = useState('signin');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
-  const [info, setInfo] = useState('');
   const [busy, setBusy] = useState(false);
 
   async function handleSubmit(event) {
     event.preventDefault();
     setError('');
-    setInfo('');
 
     const trimmedEmail = email.trim();
     if (!trimmedEmail || !password) {
@@ -23,34 +20,13 @@ function Login() {
 
     setBusy(true);
 
-    if (mode === 'signin') {
-      const { error: signInError } = await supabase.auth.signInWithPassword({
-        email: trimmedEmail,
-        password,
-      });
-
-      if (signInError) {
-        setError(`Giriş başarısız: ${signInError.message}`);
-      }
-
-      setBusy(false);
-      return;
-    }
-
-    const { data, error: signUpError } = await supabase.auth.signUp({
+    const { error: signInError } = await supabase.auth.signInWithPassword({
       email: trimmedEmail,
       password,
     });
 
-    if (signUpError) {
-      setError(`Kayıt başarısız: ${signUpError.message}`);
-      setBusy(false);
-      return;
-    }
-
-    if (!data.session) {
-      setInfo('Hesap oluşturuldu. E-posta doğrulaması açıksa gelen kutunu kontrol et, sonra giriş yap.');
-      setMode('signin');
+    if (signInError) {
+      setError(`Giriş başarısız: ${signInError.message}`);
     }
 
     setBusy(false);
@@ -67,10 +43,9 @@ function Login() {
           </div>
         </div>
 
-        <h2 className="authTitle">{mode === 'signin' ? 'Giriş yap' : 'Hesap oluştur'}</h2>
+        <h2 className="authTitle">Giriş yap</h2>
 
         {error && <div className="errorBanner">{error}</div>}
-        {info && <div className="authInfo">{info}</div>}
 
         <form className="authForm" onSubmit={handleSubmit}>
           <label className="formField">
@@ -91,26 +66,14 @@ function Login() {
               value={password}
               onChange={(event) => setPassword(event.target.value)}
               placeholder="••••••••"
-              autoComplete={mode === 'signin' ? 'current-password' : 'new-password'}
+              autoComplete="current-password"
             />
           </label>
 
           <button className="primaryButton authSubmit" type="submit" disabled={busy}>
-            {busy ? 'Lütfen bekle...' : mode === 'signin' ? 'Giriş yap' : 'Kayıt ol'}
+            {busy ? 'Lütfen bekle...' : 'Giriş yap'}
           </button>
         </form>
-
-        <button
-          className="authToggle"
-          type="button"
-          onClick={() => {
-            setMode((current) => (current === 'signin' ? 'signup' : 'signin'));
-            setError('');
-            setInfo('');
-          }}
-        >
-          {mode === 'signin' ? 'Hesabın yok mu? Kayıt ol' : 'Zaten hesabın var mı? Giriş yap'}
-        </button>
       </section>
     </main>
   );
