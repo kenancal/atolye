@@ -29,6 +29,8 @@ const categoryOptions = [
   'Donanım',
   'Marka',
   'Hizmet',
+  'Ürün',
+  'Cihaz',
   'Diğer',
 ];
 
