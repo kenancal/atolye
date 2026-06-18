@@ -19,12 +19,6 @@
   box-sizing: border-box;
 }
 
-/* Tüm arayüzü orantılı küçült (font + boşluk + kutu boyutları).
-   Değeri 0.80–0.95 arası değiştirerek genel ölçeği ayarlayabilirsin. */
-#root {
-  zoom: 0.85;
-}
-
 html {
   min-height: 100%;
   background: #f6f8fb;

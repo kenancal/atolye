@@ -49,6 +49,15 @@ const statusOptions = [
 
 const priorityOptions = ['Düşük', 'Orta', 'Yüksek', 'Kritik'];
 
+const priorityRank = { Kritik: 4, Yüksek: 3, Orta: 2, Düşük: 1 };
+
+const sortOptions = [
+  { value: 'created', label: 'Oluşturma sırası' },
+  { value: 'name', label: 'İsme göre (A→Z)' },
+  { value: 'progress', label: 'İlerlemeye göre' },
+  { value: 'priority', label: 'Önceliğe göre' },
+];
+
 const roadmapStatusOptions = ['Planlandı', 'Devam Ediyor', 'Tamamlandı'];
 
 const domainStatusOptions = ['Araştırılıyor', 'Müsait', 'Alındı', 'Müsait Değil'];
@@ -165,12 +174,15 @@ function mapProjectFromDatabase(project) {
     bannerClass: project.banner_class || 'bannerEmerald',
     logoUrl: project.logo_url || '',
     bannerUrl: project.banner_url || '',
+    pinned: project.pinned ?? false,
+    createdAt: project.created_at || null,
   };
 }
 
 function App() {
   const [projects, setProjects] = useState([]);
   const [activeFilter, setActiveFilter] = useState('Tümü');
+  const [sortBy, setSortBy] = useState('created');
   const [searchQuery, setSearchQuery] = useState('');
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalMode, setModalMode] = useState('create');
@@ -226,7 +238,7 @@ function App() {
     const { data, error } = await supabase
       .from('projects')
       .select('*')
-      .order('created_at', { ascending: false });
+      .order('created_at', { ascending: true });
 
     if (error) {
       setAppError(`Projeler yüklenemedi: ${error.message}`);
@@ -800,7 +812,7 @@ function App() {
   }
 
   const filteredProjects = useMemo(() => {
-    return projects.filter((project) => {
+    const matched = projects.filter((project) => {
       const matchesFilter = activeFilter === 'Tümü' || project.status === activeFilter;
 
       const normalizedSearch = searchQuery.trim().toLocaleLowerCase('tr-TR');
@@ -819,7 +831,31 @@ function App() {
 
       return matchesFilter && matchesSearch;
     });
-  }, [activeFilter, projects, searchQuery]);
+
+    const indexById = new Map(projects.map((project, index) => [project.id, index]));
+
+    const compareBySort = (a, b) => {
+      if (sortBy === 'name') {
+        return (a.title || '').localeCompare(b.title || '', 'tr-TR');
+      }
+      if (sortBy === 'progress') {
+        return (b.progress || 0) - (a.progress || 0);
+      }
+      if (sortBy === 'priority') {
+        return (priorityRank[b.priority] || 0) - (priorityRank[a.priority] || 0);
+      }
+      // 'created' — projects dizisindeki sıra (oluşturma sırası, yeni en sonda)
+      return indexById.get(a.id) - indexById.get(b.id);
+    };
+
+    return matched.sort((a, b) => {
+      // Sabitlenenler her zaman başta
+      if (a.pinned !== b.pinned) {
+        return a.pinned ? -1 : 1;
+      }
+      return compareBySort(a, b);
+    });
+  }, [activeFilter, projects, searchQuery, sortBy]);
 
   const averageProgress = useMemo(() => {
     if (projects.length === 0) return 0;
@@ -941,7 +977,7 @@ function App() {
       return;
     }
 
-    setProjects((currentProjects) => [mapProjectFromDatabase(data), ...currentProjects]);
+    setProjects((currentProjects) => [...currentProjects, mapProjectFromDatabase(data)]);
     setIsSaving(false);
     closeProjectModal();
   }
@@ -1392,6 +1428,29 @@ function App() {
     setSelectedProject((currentSelectedProject) =>
       currentSelectedProject?.id === updatedProject.id ? updatedProject : currentSelectedProject
     );
+  }
+
+  async function handleTogglePin(event, project) {
+    event.stopPropagation();
+    const nextPinned = !project.pinned;
+
+    // Önce arayüzde güncelle (anlık his), sonra DB'ye yaz
+    setProjects((currentProjects) =>
+      currentProjects.map((item) => (item.id === project.id ? { ...item, pinned: nextPinned } : item))
+    );
+
+    const { error } = await supabase
+      .from('projects')
+      .update({ pinned: nextPinned })
+      .eq('id', project.id);
+
+    if (error) {
+      // Hata olursa geri al
+      setProjects((currentProjects) =>
+        currentProjects.map((item) => (item.id === project.id ? { ...item, pinned: project.pinned } : item))
+      );
+      setAppError(`Sabitleme güncellenemedi: ${error.message}`);
+    }
   }
 
   function renderLogoContent(project, sizeClassName = '') {
@@ -1999,6 +2058,17 @@ function App() {
             </button>
           ))}
         </div>
+
+        <label className="sortControl">
+          <span>Sırala</span>
+          <select value={sortBy} onChange={(event) => setSortBy(event.target.value)}>
+            {sortOptions.map((option) => (
+              <option key={option.value} value={option.value}>
+                {option.label}
+              </option>
+            ))}
+          </select>
+        </label>
       </section>
 
       {isLoading ? (
@@ -2027,6 +2097,18 @@ function App() {
                   title="Banner seçenekleri"
                 >
                   <button
+                    className={project.pinned ? 'pinButton pinned' : 'pinButton'}
+                    type="button"
+                    onClick={(event) => handleTogglePin(event, project)}
+                    title={project.pinned ? 'Sabitlemeyi kaldır' : 'Sabitle'}
+                    aria-label={project.pinned ? 'Sabitlemeyi kaldır' : 'Sabitle'}
+                  >
+                    📌
+                  </button>
+                </div>
+
+                <div className="projectBody">
+                  <button
                     className="projectLogo clickableLogo"
                     type="button"
                     onClick={(event) => openAssetMenu(event, 'projectLogo', project)}
@@ -2035,49 +2117,8 @@ function App() {
                     {renderLogoContent(project)}
                   </button>
 
-                  <span className="priorityBadge">{project.priority}</span>
-                </div>
-
-                <div className="projectBody">
-                  <div className="projectHeader">
-                    <div>
-                      <p className="projectCategory">{project.category}</p>
-                      <h3>{project.title}</h3>
-                    </div>
-                    <span className="statusBadge">{project.status}</span>
-                  </div>
-
+                  <h3 className="projectTitle">{project.title}</h3>
                   <p className="projectDescription">{project.description}</p>
-
-                  <div className="progressBlock">
-                    <div className="progressText">
-                      <span>İlerleme</span>
-                      <strong>%{project.progress}</strong>
-                    </div>
-                    <div className="progressTrack">
-                      <div className="progressFill" style={{ width: `${project.progress}%` }} />
-                    </div>
-                  </div>
-
-                  <div className="metaGrid">
-                    <div>
-                      <span>Hedef</span>
-                      <strong>{project.targetDate}</strong>
-                    </div>
-                    <div>
-                      <span>Bütçe</span>
-                      <strong>{project.estimatedBudget}</strong>
-                    </div>
-                    <div>
-                      <span>Harcanan</span>
-                      <strong>{project.spentBudget}</strong>
-                    </div>
-                  </div>
-
-                  <div className="nextAction">
-                    <span>Sonraki adım</span>
-                    <p>{project.nextAction}</p>
-                  </div>
                 </div>
               </article>
             ))}
