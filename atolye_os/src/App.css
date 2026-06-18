@@ -326,6 +326,54 @@ h1 {
     linear-gradient(135deg, #1e3a8a, #38bdf8);
 }
 
+.bannerPurple {
+  background:
+    radial-gradient(circle at 72% 22%, rgba(255, 255, 255, 0.5), transparent 24%),
+    linear-gradient(135deg, #5b21b6, #a855f7);
+}
+
+.bannerRose {
+  background:
+    radial-gradient(circle at 72% 22%, rgba(255, 255, 255, 0.5), transparent 24%),
+    linear-gradient(135deg, #9d174d, #f472b6);
+}
+
+.bannerRed {
+  background:
+    radial-gradient(circle at 72% 22%, rgba(255, 255, 255, 0.5), transparent 24%),
+    linear-gradient(135deg, #991b1b, #ef4444);
+}
+
+.bannerOrange {
+  background:
+    radial-gradient(circle at 72% 22%, rgba(255, 255, 255, 0.5), transparent 24%),
+    linear-gradient(135deg, #9a3412, #fb923c);
+}
+
+.bannerTeal {
+  background:
+    radial-gradient(circle at 72% 22%, rgba(255, 255, 255, 0.5), transparent 24%),
+    linear-gradient(135deg, #115e59, #2dd4bf);
+}
+
+.bannerIndigo {
+  background:
+    radial-gradient(circle at 72% 22%, rgba(255, 255, 255, 0.5), transparent 24%),
+    linear-gradient(135deg, #312e81, #6366f1);
+}
+
+.bannerLime {
+  background:
+    radial-gradient(circle at 72% 22%, rgba(255, 255, 255, 0.5), transparent 24%),
+    linear-gradient(135deg, #3f6212, #a3e635);
+}
+
+.bannerNight {
+  background:
+    radial-gradient(circle at 72% 22%, rgba(255, 255, 255, 0.42), transparent 24%),
+    linear-gradient(135deg, #0f172a, #334155);
+}
+
 /* Logo + başlık yan yana (logo solda, başlık sağda) */
 .projectHead {
   display: flex;
@@ -408,6 +456,7 @@ h1 {
   flex: 1;
   min-width: 0;
   margin: 0;
+  text-align: center;
   overflow-wrap: anywhere;
 }
 

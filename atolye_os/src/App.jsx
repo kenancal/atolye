@@ -75,6 +75,14 @@ const bannerOptions = [
   { label: 'Amber', value: 'bannerAmber' },
   { label: 'Slate', value: 'bannerSlate' },
   { label: 'Mavi', value: 'bannerBlue' },
+  { label: 'Mor', value: 'bannerPurple' },
+  { label: 'Pembe', value: 'bannerRose' },
+  { label: 'Kırmızı', value: 'bannerRed' },
+  { label: 'Turuncu', value: 'bannerOrange' },
+  { label: 'Turkuaz', value: 'bannerTeal' },
+  { label: 'İndigo', value: 'bannerIndigo' },
+  { label: 'Limon', value: 'bannerLime' },
+  { label: 'Gece', value: 'bannerNight' },
 ];
 
 const detailTabs = [
