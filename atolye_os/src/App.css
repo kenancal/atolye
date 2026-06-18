@@ -1,0 +1,1745 @@
+#root {
+  min-height: 100vh;
+}
+
+.appShell {
+  width: min(1280px, calc(100% - 32px));
+  margin: 0 auto;
+  padding: 22px 0 40px;
+}
+
+.heroPanel {
+  border: 1px solid rgba(15, 23, 42, 0.08);
+  border-radius: 24px;
+  padding: 20px;
+  background:
+    radial-gradient(circle at 88% 18%, rgba(16, 185, 129, 0.16), transparent 28%),
+    linear-gradient(135deg, #ffffff 0%, #f8fafc 55%, #ecfdf5 100%);
+  box-shadow: 0 18px 52px rgba(15, 23, 42, 0.07);
+}
+
+.topBar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.brandBlock {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.brandMark {
+  width: 42px;
+  height: 42px;
+  border-radius: 14px;
+  display: grid;
+  place-items: center;
+  background: #059669;
+  color: #ffffff;
+  font-weight: 900;
+  font-size: 1.1rem;
+  box-shadow: 0 10px 24px rgba(5, 150, 105, 0.28);
+}
+
+.eyebrow {
+  margin: 0 0 2px;
+  font-size: 0.68rem;
+  color: #64748b;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+h1,
+h2,
+h3,
+p {
+  margin-top: 0;
+}
+
+h1 {
+  margin-bottom: 0;
+  font-size: clamp(1.25rem, 1.8vw, 1.65rem);
+  color: #0f172a;
+  letter-spacing: -0.04em;
+}
+
+.primaryButton {
+  border: 0;
+  border-radius: 999px;
+  padding: 10px 15px;
+  background: #059669;
+  color: #ffffff;
+  font-size: 0.88rem;
+  font-weight: 800;
+  cursor: pointer;
+  box-shadow: 0 12px 26px rgba(5, 150, 105, 0.22);
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease,
+    background 0.2s ease;
+}
+
+.primaryButton:hover {
+  transform: translateY(-2px);
+  background: #047857;
+  box-shadow: 0 16px 34px rgba(5, 150, 105, 0.28);
+}
+
+.primaryButton:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.secondaryButton {
+  border: 1px solid rgba(15, 23, 42, 0.12);
+  border-radius: 999px;
+  padding: 10px 15px;
+  background: #ffffff;
+  color: #334155;
+  font-size: 0.88rem;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.iconButton {
+  width: 38px;
+  height: 38px;
+  border: 1px solid rgba(15, 23, 42, 0.1);
+  border-radius: 14px;
+  background: #ffffff;
+  color: #0f172a;
+  font-size: 1.35rem;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.heroContent {
+  display: grid;
+  grid-template-columns: minmax(0, 1.35fr) minmax(260px, 0.65fr);
+  gap: 18px;
+  align-items: end;
+  padding-top: 32px;
+}
+
+.heroContent h2 {
+  max-width: 680px;
+  margin-bottom: 10px;
+  color: #0f172a;
+  font-size: clamp(1.65rem, 3.2vw, 3.1rem);
+  line-height: 1;
+  letter-spacing: -0.065em;
+}
+
+.heroContent p {
+  max-width: 620px;
+  margin-bottom: 0;
+  color: #475569;
+  font-size: 0.92rem;
+  line-height: 1.55;
+}
+
+.summaryGrid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 8px;
+}
+
+.summaryCard {
+  border: 1px solid rgba(15, 23, 42, 0.08);
+  border-radius: 16px;
+  padding: 11px 12px;
+  background: rgba(255, 255, 255, 0.76);
+  backdrop-filter: blur(12px);
+}
+
+.summaryCard span {
+  display: block;
+  color: #64748b;
+  font-size: 0.72rem;
+  font-weight: 800;
+}
+
+.summaryCard strong {
+  display: block;
+  margin-top: 3px;
+  color: #0f172a;
+  font-size: 1.18rem;
+  letter-spacing: -0.04em;
+}
+
+.toolbar {
+  display: grid;
+  grid-template-columns: minmax(260px, 1fr) auto;
+  gap: 12px;
+  align-items: center;
+  margin: 18px 0;
+}
+
+.searchBox {
+  min-height: 44px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  border: 1px solid rgba(15, 23, 42, 0.09);
+  border-radius: 16px;
+  padding: 0 13px;
+  background: #ffffff;
+  box-shadow: 0 10px 30px rgba(15, 23, 42, 0.045);
+}
+
+.searchBox span {
+  color: #94a3b8;
+  font-size: 1.05rem;
+}
+
+.searchBox input {
+  width: 100%;
+  border: 0;
+  outline: none;
+  color: #0f172a;
+  font-size: 0.9rem;
+  background: transparent;
+}
+
+.searchBox input::placeholder {
+  color: #94a3b8;
+}
+
+.filterRow {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 7px;
+  flex-wrap: wrap;
+}
+
+.filterChip {
+  border: 1px solid rgba(15, 23, 42, 0.09);
+  border-radius: 999px;
+  padding: 8px 10px;
+  background: #ffffff;
+  color: #475569;
+  font-size: 0.78rem;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.filterChip.active {
+  border-color: #059669;
+  background: #ecfdf5;
+  color: #047857;
+}
+
+.projectGrid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.projectCard {
+  overflow: hidden;
+  border: 1px solid rgba(15, 23, 42, 0.08);
+  border-radius: 20px;
+  background: #ffffff;
+  box-shadow: 0 12px 34px rgba(15, 23, 42, 0.06);
+  cursor: pointer;
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease,
+    border-color 0.2s ease;
+}
+
+.projectCard:hover {
+  transform: translateY(-3px);
+  border-color: rgba(5, 150, 105, 0.26);
+  box-shadow: 0 18px 45px rgba(15, 23, 42, 0.1);
+}
+
+.projectCard:focus {
+  outline: 4px solid rgba(5, 150, 105, 0.16);
+  outline-offset: 2px;
+}
+
+.projectBanner {
+  position: relative;
+  height: 82px;
+  padding: 10px;
+  display: grid;
+  grid-template-columns: 62px minmax(0, 1fr);
+  gap: 10px;
+  align-items: stretch;
+  background: #f8fafc;
+}
+
+.projectBanner::after {
+  content: "";
+  border-radius: 16px;
+  background: inherit;
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.18);
+}
+
+.bannerEmerald {
+  background:
+    radial-gradient(circle at 72% 22%, rgba(255, 255, 255, 0.58), transparent 24%),
+    linear-gradient(135deg, #065f46, #10b981);
+}
+
+.bannerAmber {
+  background:
+    radial-gradient(circle at 72% 22%, rgba(255, 255, 255, 0.58), transparent 24%),
+    linear-gradient(135deg, #92400e, #f59e0b);
+}
+
+.bannerSlate {
+  background:
+    radial-gradient(circle at 72% 22%, rgba(255, 255, 255, 0.5), transparent 24%),
+    linear-gradient(135deg, #111827, #64748b);
+}
+
+.bannerBlue {
+  background:
+    radial-gradient(circle at 72% 22%, rgba(255, 255, 255, 0.5), transparent 24%),
+    linear-gradient(135deg, #1e3a8a, #38bdf8);
+}
+
+.projectLogo {
+  width: 62px;
+  height: 62px;
+  border-radius: 18px;
+  display: grid;
+  place-items: center;
+  background: rgba(255, 255, 255, 0.94);
+  color: #0f172a;
+  font-size: 1.35rem;
+  font-weight: 900;
+  box-shadow: 0 10px 22px rgba(15, 23, 42, 0.14);
+  z-index: 1;
+}
+
+.priorityBadge {
+  position: absolute;
+  right: 16px;
+  top: 16px;
+  z-index: 2;
+  border-radius: 999px;
+  padding: 5px 7px;
+  background: rgba(255, 255, 255, 0.88);
+  color: #0f172a;
+  font-size: 0.64rem;
+  font-weight: 900;
+}
+
+.projectBody {
+  padding: 12px;
+}
+
+.projectHeader {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.projectCategory {
+  margin-bottom: 4px;
+  color: #059669;
+  font-size: 0.62rem;
+  font-weight: 900;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+}
+
+.projectHeader h3 {
+  margin-bottom: 0;
+  color: #0f172a;
+  font-size: 1rem;
+  letter-spacing: -0.04em;
+}
+
+.statusBadge {
+  flex: 0 0 auto;
+  border-radius: 999px;
+  padding: 5px 7px;
+  background: #f1f5f9;
+  color: #334155;
+  font-size: 0.62rem;
+  font-weight: 900;
+}
+
+.projectDescription {
+  min-height: 38px;
+  margin: 8px 0 12px;
+  color: #64748b;
+  font-size: 0.78rem;
+  line-height: 1.38;
+}
+
+.progressBlock {
+  margin-bottom: 12px;
+}
+
+.progressText {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 6px;
+  color: #475569;
+  font-size: 0.72rem;
+  font-weight: 800;
+}
+
+.progressText strong {
+  color: #0f172a;
+}
+
+.progressTrack {
+  height: 7px;
+  overflow: hidden;
+  border-radius: 999px;
+  background: #e2e8f0;
+}
+
+.progressFill {
+  height: 100%;
+  border-radius: inherit;
+  background: #059669;
+}
+
+.metaGrid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 6px;
+  margin-bottom: 10px;
+}
+
+.metaGrid div {
+  border: 1px solid #eef2f7;
+  border-radius: 12px;
+  padding: 8px;
+  background: #f8fafc;
+}
+
+.metaGrid span,
+.nextAction span {
+  display: block;
+  margin-bottom: 3px;
+  color: #94a3b8;
+  font-size: 0.6rem;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.metaGrid strong {
+  color: #0f172a;
+  font-size: 0.74rem;
+}
+
+.nextAction {
+  border-radius: 14px;
+  padding: 9px;
+  background: #ecfdf5;
+}
+
+.nextAction p {
+  margin-bottom: 0;
+  color: #065f46;
+  font-size: 0.74rem;
+  font-weight: 700;
+  line-height: 1.35;
+}
+
+.errorBanner {
+  margin: 16px 0 0;
+  border: 1px solid rgba(220, 38, 38, 0.22);
+  border-radius: 16px;
+  padding: 12px 14px;
+  background: #fef2f2;
+  color: #991b1b;
+  font-size: 0.88rem;
+  font-weight: 800;
+}
+
+.emptyState {
+  border: 1px dashed rgba(15, 23, 42, 0.16);
+  border-radius: 22px;
+  padding: 28px;
+  background: rgba(255, 255, 255, 0.7);
+  text-align: center;
+}
+
+.emptyState h3 {
+  margin-bottom: 8px;
+  color: #0f172a;
+}
+
+.emptyState p {
+  margin-bottom: 0;
+  color: #64748b;
+}
+
+.modalOverlay {
+  position: fixed;
+  inset: 0;
+  z-index: 20;
+  display: grid;
+  place-items: center;
+  padding: 20px;
+  background: rgba(15, 23, 42, 0.42);
+  backdrop-filter: blur(10px);
+}
+
+.projectModal {
+  width: min(820px, 100%);
+  max-height: min(92vh, 860px);
+  overflow: auto;
+  border: 1px solid rgba(15, 23, 42, 0.08);
+  border-radius: 28px;
+  padding: 22px;
+  background: #ffffff;
+  box-shadow: 0 30px 90px rgba(15, 23, 42, 0.28);
+}
+
+.modalHeader {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 18px;
+}
+
+.modalHeader h2 {
+  margin-bottom: 0;
+  color: #0f172a;
+  font-size: 1.55rem;
+  letter-spacing: -0.05em;
+}
+
+.projectForm {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.formField {
+  display: grid;
+  gap: 7px;
+}
+
+.formField.fullWidth {
+  grid-column: 1 / -1;
+}
+
+.formField span {
+  color: #334155;
+  font-size: 0.78rem;
+  font-weight: 900;
+}
+
+.formField input,
+.formField select,
+.formField textarea {
+  width: 100%;
+  border: 1px solid rgba(15, 23, 42, 0.12);
+  border-radius: 14px;
+  padding: 11px 12px;
+  outline: none;
+  background: #ffffff;
+  color: #0f172a;
+  font-size: 0.9rem;
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.formField textarea {
+  resize: vertical;
+}
+
+.formField input:focus,
+.formField select:focus,
+.formField textarea:focus {
+  border-color: #059669;
+  box-shadow: 0 0 0 4px rgba(5, 150, 105, 0.1);
+}
+
+.formActions {
+  grid-column: 1 / -1;
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  padding-top: 8px;
+}
+
+.detailOverlay {
+  position: fixed;
+  inset: 0;
+  z-index: 30;
+  display: flex;
+  justify-content: flex-end;
+  background: rgba(15, 23, 42, 0.42);
+  backdrop-filter: blur(10px);
+}
+
+.detailDrawer {
+  width: min(720px, 100%);
+  height: 100%;
+  overflow: auto;
+  background: #ffffff;
+  box-shadow: -30px 0 90px rgba(15, 23, 42, 0.25);
+}
+
+.detailHero {
+  position: relative;
+  height: 150px;
+  padding: 22px;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+}
+
+.detailLogo {
+  width: 76px;
+  height: 76px;
+  border-radius: 24px;
+  display: grid;
+  place-items: center;
+  background: rgba(255, 255, 255, 0.94);
+  color: #0f172a;
+  font-size: 2rem;
+  font-weight: 900;
+  box-shadow: 0 16px 36px rgba(15, 23, 42, 0.18);
+}
+
+.detailCloseButton {
+  position: absolute;
+  top: 18px;
+  right: 18px;
+  width: 38px;
+  height: 38px;
+  border: 0;
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.9);
+  color: #0f172a;
+  font-size: 1.35rem;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.detailHeader {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 22px 24px 14px;
+}
+
+.detailHeader h2 {
+  margin-bottom: 0;
+  color: #0f172a;
+  font-size: 2rem;
+  letter-spacing: -0.06em;
+}
+
+.detailBadges {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+
+.detailBadges span {
+  border-radius: 999px;
+  padding: 8px 10px;
+  background: #f1f5f9;
+  color: #334155;
+  font-size: 0.76rem;
+  font-weight: 900;
+}
+
+.detailTabs {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  padding: 0 24px 16px;
+  border-bottom: 1px solid #eef2f7;
+}
+
+.detailTab {
+  flex: 0 0 auto;
+  border: 1px solid rgba(15, 23, 42, 0.1);
+  border-radius: 999px;
+  padding: 9px 12px;
+  background: #ffffff;
+  color: #475569;
+  font-size: 0.8rem;
+  font-weight: 900;
+  cursor: pointer;
+}
+
+.detailTab.active {
+  border-color: #059669;
+  background: #ecfdf5;
+  color: #047857;
+}
+
+.detailContentGrid {
+  display: grid;
+  gap: 14px;
+  padding: 20px 24px 28px;
+}
+
+.detailInfoCard {
+  border: 1px solid #eef2f7;
+  border-radius: 20px;
+  padding: 16px;
+  background: #f8fafc;
+}
+
+.detailInfoCard.fullWidth {
+  grid-column: 1 / -1;
+}
+
+.detailInfoCard span,
+.detailStatsGrid span {
+  display: block;
+  margin-bottom: 6px;
+  color: #94a3b8;
+  font-size: 0.7rem;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.detailInfoCard p {
+  margin-bottom: 0;
+  color: #334155;
+  line-height: 1.6;
+  font-weight: 700;
+}
+
+.detailStatsGrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.detailStatsGrid div {
+  border: 1px solid #eef2f7;
+  border-radius: 18px;
+  padding: 14px;
+  background: #ffffff;
+}
+
+.detailStatsGrid strong {
+  display: block;
+  color: #0f172a;
+  font-size: 0.95rem;
+}
+
+.placeholderPanel {
+  margin: 20px 24px 28px;
+  border: 1px dashed rgba(15, 23, 42, 0.18);
+  border-radius: 22px;
+  padding: 22px;
+  background: #f8fafc;
+}
+
+.placeholderPanel h3 {
+  margin-bottom: 8px;
+  color: #0f172a;
+}
+
+.placeholderPanel p {
+  margin-bottom: 0;
+  color: #64748b;
+  line-height: 1.6;
+  font-weight: 700;
+}
+
+@media (max-width: 1120px) {
+  .projectGrid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 900px) {
+  .heroContent,
+  .toolbar {
+    grid-template-columns: 1fr;
+  }
+
+  .projectGrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .filterRow {
+    justify-content: flex-start;
+  }
+}
+
+@media (max-width: 620px) {
+  .appShell {
+    width: min(100% - 20px, 1180px);
+    padding: 10px 0 32px;
+  }
+
+  .heroPanel {
+    border-radius: 22px;
+    padding: 16px;
+  }
+
+  .topBar {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .primaryButton {
+    width: 100%;
+  }
+
+  .heroContent {
+    padding-top: 28px;
+  }
+
+  .heroContent h2 {
+    font-size: 1.9rem;
+  }
+
+  .projectGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .projectBanner {
+    height: 88px;
+    grid-template-columns: 68px minmax(0, 1fr);
+  }
+
+  .projectLogo {
+    width: 68px;
+    height: 68px;
+  }
+
+  .projectForm {
+    grid-template-columns: 1fr;
+  }
+
+  .formActions {
+    flex-direction: column-reverse;
+  }
+
+  .secondaryButton,
+  .formActions .primaryButton {
+    width: 100%;
+  }
+
+  .detailDrawer {
+    width: 100%;
+  }
+
+  .detailHeader {
+    flex-direction: column;
+  }
+
+  .detailBadges {
+    justify-content: flex-start;
+  }
+
+  .detailStatsGrid {
+    grid-template-columns: 1fr;
+  }
+}/* Detail drawer ve edit modal katman düzeltmesi */
+.detailOverlay {
+  z-index: 40;
+}
+
+.modalOverlay {
+  z-index: 120;
+}
+
+/* Projeyi Düzenle butonu ile sekmeler arasındaki boşluk */
+.detailActionRow {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 10px;
+  margin: 12px 24px 18px;
+}
+
+.dangerButton {
+  border: 1px solid rgba(220, 38, 38, 0.25);
+  border-radius: 999px;
+  padding: 10px 15px;
+  background: #fef2f2;
+  color: #b91c1c;
+  font-size: 0.88rem;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.dangerButton:hover {
+  background: #fee2e2;
+}
+
+.dangerButton:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* Sekmelerin butona yapışmasını engeller */
+.detailTabs {
+  margin-top: 0;
+}
+/* Logo / banner tıklama ve menü sistemi */
+.brandMarkButton,
+.clickableLogo {
+  border: 0;
+  cursor: pointer;
+  font: inherit;
+}
+
+.brandMarkButton:hover,
+.clickableLogo:hover,
+.clickableAsset:hover {
+  filter: brightness(0.98);
+}
+
+.clickableAsset {
+  cursor: pointer;
+  position: relative;
+}
+
+.clickableAsset::after {
+  content: '•••';
+  position: absolute;
+  right: 14px;
+  bottom: 10px;
+  min-width: 28px;
+  height: 22px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.82);
+  color: #0f172a;
+  font-size: 13px;
+  font-weight: 900;
+  line-height: 18px;
+  text-align: center;
+  opacity: 0;
+  transform: translateY(4px);
+  transition: opacity 0.18s ease, transform 0.18s ease;
+}
+
+.clickableAsset:hover::after {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.assetMenuOverlay,
+.assetPreviewOverlay {
+  position: fixed;
+  inset: 0;
+  z-index: 180;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  background: rgba(15, 23, 42, 0.48);
+  backdrop-filter: blur(10px);
+}
+
+.assetPreviewOverlay {
+  z-index: 190;
+}
+
+.assetMenu,
+.assetPreview {
+  width: min(420px, 100%);
+  border: 1px solid rgba(226, 232, 240, 0.95);
+  border-radius: 28px;
+  background: #ffffff;
+  box-shadow: 0 30px 90px rgba(15, 23, 42, 0.28);
+  padding: 22px;
+}
+
+.assetMenuHeader {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 18px;
+  margin-bottom: 18px;
+}
+
+.assetMenuHeader h3 {
+  margin: 4px 0 0;
+  color: #0f172a;
+  font-size: 22px;
+  letter-spacing: -0.04em;
+}
+
+.assetMenuActions {
+  display: grid;
+  gap: 10px;
+}
+
+.assetMenuActions button {
+  width: 100%;
+  border: 1px solid #e2e8f0;
+  border-radius: 18px;
+  background: #f8fafc;
+  color: #0f172a;
+  cursor: pointer;
+  font-weight: 900;
+  padding: 14px 16px;
+  text-align: left;
+  transition: transform 0.18s ease, border-color 0.18s ease, background 0.18s ease;
+}
+
+.assetMenuActions button:hover {
+  border-color: #10b981;
+  background: #ecfdf5;
+  transform: translateY(-1px);
+}
+
+.assetMenuActions button:disabled {
+  cursor: not-allowed;
+  opacity: 0.55;
+  transform: none;
+}
+
+.assetPreviewVisual {
+  min-height: 190px;
+  border-radius: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 14px;
+}
+
+.assetPreviewLogo {
+  width: 92px;
+  height: 92px;
+  border-radius: 28px;
+  display: grid;
+  place-items: center;
+  background: rgba(255, 255, 255, 0.92);
+  color: #0f172a;
+  font-size: 44px;
+  font-weight: 950;
+  box-shadow: 0 18px 40px rgba(15, 23, 42, 0.18);
+}
+
+.assetPreview p {
+  margin: 0;
+  color: #475569;
+  font-weight: 700;
+  line-height: 1.6;
+}
+
+/* Gerçek logo/banner görsel yükleme görünümü */
+.projectBanner,
+.detailHero,
+.assetPreviewVisual {
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+.logoImage,
+.brandLogoImage {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: contain;
+  border-radius: inherit;
+}
+
+.detailLogoImage {
+  object-fit: contain;
+}
+
+.assetPreviewImageLogo {
+  width: min(180px, 60%);
+  max-height: 150px;
+  object-fit: contain;
+  border-radius: 24px;
+  background: rgba(255, 255, 255, 0.92);
+  padding: 14px;
+  box-shadow: 0 18px 40px rgba(15, 23, 42, 0.18);
+}
+
+/* Logo ve banner ayrımı - final düzeltme */
+.projectBanner,
+.detailHero,
+.bannerPreviewPanel {
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+.projectLogo,
+.detailLogo,
+.brandMarkButton {
+  overflow: hidden;
+}
+
+.logoImage,
+.brandLogoImage {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: contain;
+  border-radius: inherit;
+}
+
+.detailLogoImage {
+  object-fit: contain;
+}
+
+.logoPreviewPanel {
+  min-height: 220px;
+  border-radius: 26px;
+  border: 1px solid #e2e8f0;
+  background: #f8fafc;
+  display: grid;
+  place-items: center;
+  margin-bottom: 14px;
+  padding: 24px;
+}
+
+.logoPreviewImage {
+  max-width: 220px;
+  max-height: 160px;
+  width: auto;
+  height: auto;
+  object-fit: contain;
+  border-radius: 20px;
+}
+
+.logoPreviewLetter {
+  width: 110px;
+  height: 110px;
+  border-radius: 32px;
+  display: grid;
+  place-items: center;
+  background: #ffffff;
+  color: #0f172a;
+  font-size: 52px;
+  font-weight: 950;
+  box-shadow: 0 18px 40px rgba(15, 23, 42, 0.14);
+}
+
+.bannerPreviewPanel {
+  min-height: 220px;
+  border-radius: 26px;
+  border: 1px solid #e2e8f0;
+  margin-bottom: 14px;
+}
+
+/* Görevler sekmesi */
+.taskPanel {
+  padding: 4px 24px 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.addTaskRow {
+  display: flex;
+  gap: 10px;
+}
+
+.addTaskRow input {
+  flex: 1;
+  border: 1px solid rgba(15, 23, 42, 0.12);
+  border-radius: 14px;
+  padding: 11px 14px;
+  font-size: 0.92rem;
+}
+
+.addTaskRow input:focus {
+  outline: none;
+  border-color: #10b981;
+}
+
+.taskSummary {
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: #64748b;
+  margin: 0;
+}
+
+.taskEmpty {
+  font-size: 0.9rem;
+  color: #64748b;
+  margin: 6px 0;
+}
+
+.taskList {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.taskItem {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  border: 1px solid #e2e8f0;
+  border-radius: 14px;
+  padding: 11px 14px;
+  background: #ffffff;
+}
+
+.taskCheck {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  font-size: 0.92rem;
+  color: #0f172a;
+}
+
+.taskCheck input {
+  width: 18px;
+  height: 18px;
+  cursor: pointer;
+  accent-color: #10b981;
+}
+
+.taskItem.done .taskCheck span {
+  text-decoration: line-through;
+  color: #94a3b8;
+}
+
+.taskDelete {
+  border: 0;
+  background: transparent;
+  color: #94a3b8;
+  font-size: 1.3rem;
+  line-height: 1;
+  cursor: pointer;
+  padding: 0 4px;
+}
+
+.taskDelete:hover {
+  color: #dc2626;
+}
+
+/* Notlar sekmesi */
+.notePanel {
+  padding: 4px 24px 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.addNoteForm textarea,
+.noteEdit textarea {
+  width: 100%;
+  border: 1px solid rgba(15, 23, 42, 0.12);
+  border-radius: 14px;
+  padding: 11px 14px;
+  font-size: 0.92rem;
+  font-family: inherit;
+  resize: vertical;
+  box-sizing: border-box;
+}
+
+.addNoteForm textarea:focus,
+.noteEdit textarea:focus {
+  outline: none;
+  border-color: #10b981;
+}
+
+.addNoteActions,
+.noteEditActions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.noteList {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.noteItem {
+  border: 1px solid #e2e8f0;
+  border-radius: 14px;
+  padding: 13px 15px;
+  background: #ffffff;
+}
+
+.noteContent {
+  margin: 0 0 10px;
+  font-size: 0.92rem;
+  color: #0f172a;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.noteFooter {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.noteFooter > span {
+  font-size: 0.78rem;
+  color: #94a3b8;
+  font-weight: 700;
+}
+
+.noteActions {
+  display: flex;
+  gap: 8px;
+}
+
+.noteActions button {
+  border: 0;
+  background: transparent;
+  color: #475569;
+  font-size: 0.82rem;
+  font-weight: 800;
+  cursor: pointer;
+  padding: 2px 4px;
+}
+
+.noteActions button:hover {
+  color: #0f172a;
+}
+
+.noteActions .noteDelete:hover {
+  color: #dc2626;
+}
+
+/* Yol Haritası sekmesi */
+.roadmapPanel {
+  padding: 4px 24px 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.addMilestoneRow {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.addMilestoneRow input[type='text'],
+.addMilestoneRow input:not([type]) {
+  flex: 1;
+  min-width: 160px;
+}
+
+.addMilestoneRow input {
+  border: 1px solid rgba(15, 23, 42, 0.12);
+  border-radius: 14px;
+  padding: 11px 14px;
+  font-size: 0.92rem;
+  font-family: inherit;
+}
+
+.addMilestoneRow input:focus {
+  outline: none;
+  border-color: #10b981;
+}
+
+.roadmapList {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.roadmapItem {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  border: 1px solid #e2e8f0;
+  border-radius: 14px;
+  padding: 11px 14px;
+  background: #ffffff;
+}
+
+.roadmapDot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  background: #cbd5e1;
+}
+
+.roadmapItem.status-active .roadmapDot {
+  background: #f59e0b;
+}
+
+.roadmapItem.status-done .roadmapDot {
+  background: #10b981;
+}
+
+.roadmapBody {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.roadmapBody strong {
+  font-size: 0.92rem;
+  color: #0f172a;
+}
+
+.roadmapItem.status-done .roadmapBody strong {
+  text-decoration: line-through;
+  color: #94a3b8;
+}
+
+.roadmapBody span {
+  font-size: 0.76rem;
+  color: #94a3b8;
+  font-weight: 700;
+}
+
+.roadmapItem select {
+  border: 1px solid rgba(15, 23, 42, 0.12);
+  border-radius: 999px;
+  padding: 6px 10px;
+  font-size: 0.76rem;
+  font-weight: 700;
+  color: #334155;
+  background: #f8fafc;
+  cursor: pointer;
+}
+
+/* Dosyalar sekmesi */
+.filePanel {
+  padding: 4px 24px 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.fileUploadRow {
+  display: flex;
+  justify-content: flex-start;
+}
+
+.fileList {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.fileItem {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  border: 1px solid #e2e8f0;
+  border-radius: 14px;
+  padding: 11px 14px;
+  background: #ffffff;
+}
+
+.fileLink {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+  flex: 1;
+  text-decoration: none;
+}
+
+.fileName {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: #047857;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.fileLink:hover .fileName {
+  text-decoration: underline;
+}
+
+.fileMeta {
+  font-size: 0.74rem;
+  color: #94a3b8;
+  font-weight: 700;
+}
+
+/* Rakipler sekmesi */
+.competitorPanel {
+  padding: 4px 24px 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.competitorInputs {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-bottom: 10px;
+}
+
+.competitorInputs input {
+  flex: 1;
+  min-width: 150px;
+}
+
+.addCompetitorForm input,
+.addCompetitorForm textarea {
+  border: 1px solid rgba(15, 23, 42, 0.12);
+  border-radius: 14px;
+  padding: 11px 14px;
+  font-size: 0.92rem;
+  font-family: inherit;
+  box-sizing: border-box;
+}
+
+.addCompetitorForm textarea {
+  width: 100%;
+  resize: vertical;
+}
+
+.addCompetitorForm input:focus,
+.addCompetitorForm textarea:focus {
+  outline: none;
+  border-color: #10b981;
+}
+
+.competitorList {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.competitorItem {
+  border: 1px solid #e2e8f0;
+  border-radius: 14px;
+  padding: 13px 15px;
+  background: #ffffff;
+}
+
+.competitorHead {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.competitorHead a,
+.competitorHead strong {
+  font-size: 0.95rem;
+  font-weight: 800;
+  color: #047857;
+  text-decoration: none;
+}
+
+.competitorHead strong {
+  color: #0f172a;
+}
+
+.competitorHead a:hover {
+  text-decoration: underline;
+}
+
+.competitorBody p {
+  margin: 8px 0 0;
+  font-size: 0.86rem;
+  color: #475569;
+  line-height: 1.45;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+/* Marka & Domain sekmesi */
+.brandPanel {
+  padding: 4px 24px 24px;
+}
+
+.brandForm {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+
+.brandForm .errorBanner {
+  grid-column: 1 / -1;
+}
+
+.brandField {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.brandField.fullWidth {
+  grid-column: 1 / -1;
+}
+
+.brandField > span {
+  font-size: 0.78rem;
+  font-weight: 800;
+  color: #475569;
+}
+
+.brandField input,
+.brandField select,
+.brandField textarea {
+  border: 1px solid rgba(15, 23, 42, 0.12);
+  border-radius: 14px;
+  padding: 11px 14px;
+  font-size: 0.92rem;
+  font-family: inherit;
+  box-sizing: border-box;
+}
+
+.brandField textarea {
+  resize: vertical;
+}
+
+.brandField input:focus,
+.brandField select:focus,
+.brandField textarea:focus {
+  outline: none;
+  border-color: #10b981;
+}
+
+.brandColorRow {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.brandColorRow input[type='color'] {
+  width: 48px;
+  height: 42px;
+  padding: 4px;
+  cursor: pointer;
+}
+
+.brandColorValue {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: #334155;
+  text-transform: uppercase;
+}
+
+.brandActions {
+  grid-column: 1 / -1;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 12px;
+}
+
+.brandSavedNote {
+  font-size: 0.82rem;
+  font-weight: 800;
+  color: #047857;
+}
+
+/* Giriş / kimlik doğrulama */
+.topBarActions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.authShell {
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  padding: 24px;
+  background:
+    radial-gradient(circle at 88% 18%, rgba(16, 185, 129, 0.16), transparent 28%),
+    linear-gradient(135deg, #ffffff 0%, #f8fafc 55%, #ecfdf5 100%);
+}
+
+.authCard {
+  width: min(420px, 100%);
+  border: 1px solid rgba(15, 23, 42, 0.08);
+  border-radius: 24px;
+  padding: 28px;
+  background: rgba(255, 255, 255, 0.92);
+  box-shadow: 0 18px 52px rgba(15, 23, 42, 0.1);
+}
+
+.authBrand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 22px;
+}
+
+.authTitle {
+  margin-bottom: 16px;
+  font-size: 1.3rem;
+  color: #0f172a;
+  letter-spacing: -0.03em;
+}
+
+.authForm {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  margin-bottom: 14px;
+}
+
+.authSubmit {
+  margin-top: 4px;
+  width: 100%;
+}
+
+.authToggle {
+  border: 0;
+  background: transparent;
+  color: #047857;
+  font-size: 0.85rem;
+  font-weight: 800;
+  cursor: pointer;
+  padding: 4px;
+}
+
+.authToggle:hover {
+  text-decoration: underline;
+}
+
+.authInfo {
+  border: 1px solid #a7f3d0;
+  background: #ecfdf5;
+  color: #047857;
+  border-radius: 14px;
+  padding: 11px 14px;
+  font-size: 0.85rem;
+  font-weight: 700;
+  margin-bottom: 14px;
+}
