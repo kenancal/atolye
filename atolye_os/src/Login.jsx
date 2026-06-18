@@ -39,7 +39,7 @@ function Login() {
           <div className="brandMark">A</div>
           <div>
             <p className="eyebrow">Kişisel girişim merkezi</p>
-            <h1>Atölye OS</h1>
+            <h1>Atölye</h1>
           </div>
         </div>
 

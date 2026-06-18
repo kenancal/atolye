@@ -153,9 +153,9 @@ h1 {
   max-width: 680px;
   margin-bottom: 10px;
   color: #0f172a;
-  font-size: clamp(0.85rem, 1.6vw, 1.55rem);
-  line-height: 1.15;
-  letter-spacing: -0.03em;
+  font-size: clamp(0.55rem, 1.05vw, 1.03rem);
+  line-height: 1.2;
+  letter-spacing: -0.02em;
 }
 
 .heroContent p {
@@ -1006,7 +1006,7 @@ h1 {
   }
 
   .heroContent h2 {
-    font-size: 0.95rem;
+    font-size: 0.63rem;
   }
 
   .projectGrid {
