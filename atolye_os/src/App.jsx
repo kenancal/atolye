@@ -207,6 +207,7 @@ function App() {
   const [assetPreview, setAssetPreview] = useState(null);
   const [brandLogo, setBrandLogo] = useState('A');
   const [brandLogoUrl, setBrandLogoUrl] = useState('');
+  const [appBannerUrl, setAppBannerUrl] = useState('');
   const [projectTasks, setProjectTasks] = useState([]);
   const [tasksLoading, setTasksLoading] = useState(false);
   const [tasksError, setTasksError] = useState('');
@@ -267,7 +268,7 @@ function App() {
   const fetchBrandLogo = useCallback(async () => {
     const { data, error } = await supabase
       .from('app_settings')
-      .select('brand_logo_url')
+      .select('brand_logo_url, app_banner_url')
       .maybeSingle();
 
     if (error) {
@@ -275,6 +276,7 @@ function App() {
     }
 
     setBrandLogoUrl(data?.brand_logo_url || '');
+    setAppBannerUrl(data?.app_banner_url || '');
   }, []);
 
   useEffect(() => {
@@ -1080,7 +1082,8 @@ function App() {
   function getAssetMenuTitle() {
     if (!assetMenu) return '';
 
-    if (assetMenu.type === 'brandLogo') return 'Atölye OS logosu';
+    if (assetMenu.type === 'brandLogo') return 'Atölye logosu';
+    if (assetMenu.type === 'appBanner') return 'Pano bannerı';
     if (isLogoAsset(assetMenu.type)) return 'Proje logosu';
     if (isBannerAsset(assetMenu.type)) return 'Proje bannerı';
 
@@ -1091,6 +1094,8 @@ function App() {
     if (!assetMenu) return 'Yükle';
 
     if (assetMenu.type === 'brandLogo') return brandLogoUrl ? 'Logoyu Değiştir' : 'Logo Yükle';
+
+    if (assetMenu.type === 'appBanner') return appBannerUrl ? 'Bannerı Değiştir' : 'Banner Yükle';
 
     if (isLogoAsset(assetMenu.type)) {
       return assetMenu.project?.logoUrl ? 'Logoyu Değiştir' : 'Logo Yükle';
@@ -1107,6 +1112,7 @@ function App() {
     if (!assetMenu) return 'Kaldır';
 
     if (assetMenu.type === 'brandLogo') return 'Logoyu Kaldır';
+    if (assetMenu.type === 'appBanner') return 'Bannerı Kaldır';
     if (isLogoAsset(assetMenu.type)) return 'Logoyu Kaldır';
     if (isBannerAsset(assetMenu.type)) return 'Bannerı Kaldır';
 
@@ -1123,6 +1129,18 @@ function App() {
         logo: brandLogo,
         logoUrl: brandLogoUrl,
         description: brandLogoUrl ? 'Ana marka logosu görsel önizlemesi.' : 'Ana marka logo harfi önizlemesi.',
+      });
+      setAssetMenu(null);
+      return;
+    }
+
+    if (assetMenu.type === 'appBanner') {
+      setAssetPreview({
+        kind: 'banner',
+        title: 'Pano bannerı',
+        bannerUrl: appBannerUrl,
+        bannerClass: 'bannerEmerald',
+        description: appBannerUrl ? 'Panonun üst banner görseli.' : 'Henüz banner yüklenmedi.',
       });
       setAssetMenu(null);
       return;
@@ -1204,6 +1222,11 @@ function App() {
       return;
     }
 
+    if (currentAssetMenu.type === 'appBanner') {
+      await handleUploadAppBanner();
+      return;
+    }
+
     if (isLogoAsset(currentAssetMenu.type)) {
       await handleUploadLogo(currentAssetMenu.project);
       return;
@@ -1241,6 +1264,46 @@ function App() {
     } finally {
       setIsSaving(false);
     }
+  }
+
+  async function handleUploadAppBanner() {
+    const file = await chooseImageFile();
+
+    if (!file) return;
+
+    const previousUrl = appBannerUrl;
+
+    setIsSaving(true);
+    setAppError('');
+
+    try {
+      const publicUrl = await uploadFileToStorage(file, 'appbanner');
+      setAppBannerUrl(publicUrl);
+      const { error: settingsError } = await supabase
+        .from('app_settings')
+        .upsert({ owner_id: (await supabase.auth.getUser()).data.user?.id, app_banner_url: publicUrl });
+      if (settingsError) {
+        throw new Error(settingsError.message);
+      }
+      await removeFileFromStorage(previousUrl);
+      setAssetMenu(null);
+    } catch (error) {
+      setAppError(`Banner yüklenemedi: ${error.message}`);
+      setAssetMenu(null);
+    } finally {
+      setIsSaving(false);
+    }
+  }
+
+  async function handleRemoveAppBanner() {
+    const previousUrl = appBannerUrl;
+    setAppBannerUrl('');
+    setAssetMenu(null);
+    await supabase
+      .from('app_settings')
+      .update({ app_banner_url: null })
+      .eq('owner_id', (await supabase.auth.getUser()).data.user?.id);
+    removeFileFromStorage(previousUrl);
   }
 
   async function handleUploadLogo(project) {
@@ -1326,6 +1389,11 @@ function App() {
 
     if (assetMenu.type === 'brandLogo') {
       handleRemoveBrandLogo();
+      return;
+    }
+
+    if (assetMenu.type === 'appBanner') {
+      handleRemoveAppBanner();
       return;
     }
 
@@ -1990,20 +2058,30 @@ function App() {
   return (
     <main className="appShell">
       <section className="heroPanel">
+        <div
+          className={`appBanner clickableAsset ${appBannerUrl ? 'hasImage' : 'bannerEmerald'}`}
+          style={appBannerUrl ? { backgroundImage: `url(${appBannerUrl})` } : undefined}
+          onClick={(event) => openAssetMenu(event, 'appBanner')}
+          title="Pano bannerı seçenekleri"
+          role="button"
+        >
+          {!appBannerUrl && <span className="appBannerHint">Banner eklemek için tıkla</span>}
+        </div>
+
         <header className="topBar">
           <div className="brandBlock">
             <button
               className="brandMark brandMarkButton"
               type="button"
               onClick={(event) => openAssetMenu(event, 'brandLogo')}
-              title="Atölye OS logo seçenekleri"
+              title="Atölye logo seçenekleri"
             >
-              {brandLogoUrl ? <img className="brandLogoImage" src={brandLogoUrl} alt="Atölye OS logosu" /> : brandLogo}
+              {brandLogoUrl ? <img className="brandLogoImage" src={brandLogoUrl} alt="Atölye logosu" /> : brandLogo}
             </button>
 
             <div>
               <p className="eyebrow">Kişisel girişim merkezi</p>
-              <h1>Atölye OS</h1>
+              <h1>Atölye</h1>
             </div>
           </div>
 
