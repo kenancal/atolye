@@ -559,13 +559,13 @@ h1 {
 }
 
 .projectDescription {
-  min-height: 54px;
+  min-height: 108px;
   margin: 8px 0 12px;
   color: #64748b;
   font-size: 0.78rem;
   line-height: 1.38;
   display: -webkit-box;
-  -webkit-line-clamp: 4;
+  -webkit-line-clamp: 8;
   -webkit-box-orient: vertical;
   overflow: hidden;
 }
