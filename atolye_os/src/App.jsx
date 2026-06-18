@@ -183,7 +183,7 @@ function App() {
   const [assetMenu, setAssetMenu] = useState(null);
   const [assetPreview, setAssetPreview] = useState(null);
   const [brandLogo, setBrandLogo] = useState('A');
-  const [brandLogoUrl, setBrandLogoUrl] = useState(() => localStorage.getItem('atolyeBrandLogoUrl') || '');
+  const [brandLogoUrl, setBrandLogoUrl] = useState('');
   const [projectTasks, setProjectTasks] = useState([]);
   const [tasksLoading, setTasksLoading] = useState(false);
   const [tasksError, setTasksError] = useState('');
@@ -240,6 +240,23 @@ function App() {
   useEffect(() => {
     fetchProjects();
   }, [fetchProjects]);
+
+  const fetchBrandLogo = useCallback(async () => {
+    const { data, error } = await supabase
+      .from('app_settings')
+      .select('brand_logo_url')
+      .maybeSingle();
+
+    if (error) {
+      return;
+    }
+
+    setBrandLogoUrl(data?.brand_logo_url || '');
+  }, []);
+
+  useEffect(() => {
+    fetchBrandLogo();
+  }, [fetchBrandLogo]);
 
   const fetchTasks = useCallback(async (projectId) => {
     setTasksLoading(true);
@@ -1163,7 +1180,12 @@ function App() {
     try {
       const publicUrl = await uploadFileToStorage(file, 'brand');
       setBrandLogoUrl(publicUrl);
-      localStorage.setItem('atolyeBrandLogoUrl', publicUrl);
+      const { error: settingsError } = await supabase
+        .from('app_settings')
+        .upsert({ owner_id: (await supabase.auth.getUser()).data.user?.id, brand_logo_url: publicUrl });
+      if (settingsError) {
+        throw new Error(settingsError.message);
+      }
       await removeFileFromStorage(previousUrl);
       setAssetMenu(null);
     } catch (error) {
@@ -1270,12 +1292,15 @@ function App() {
     }
   }
 
-  function handleRemoveBrandLogo() {
+  async function handleRemoveBrandLogo() {
     const previousUrl = brandLogoUrl;
     setBrandLogo('A');
     setBrandLogoUrl('');
-    localStorage.removeItem('atolyeBrandLogoUrl');
     setAssetMenu(null);
+    await supabase
+      .from('app_settings')
+      .update({ brand_logo_url: null })
+      .eq('owner_id', (await supabase.auth.getUser()).data.user?.id);
     removeFileFromStorage(previousUrl);
   }
 
