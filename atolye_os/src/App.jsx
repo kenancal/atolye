@@ -2068,25 +2068,27 @@ function App() {
           ))}
         </div>
 
-        <label className="sortControl">
-          <span>Sırala</span>
-          <select value={sortBy} onChange={(event) => setSortBy(event.target.value)}>
-            {sortOptions.map((option) => (
-              <option key={option.value} value={option.value}>
-                {option.label}
-              </option>
-            ))}
-          </select>
-        </label>
+        <div className="sortRow">
+          <label className="sortControl">
+            <span>Sırala</span>
+            <select value={sortBy} onChange={(event) => setSortBy(event.target.value)}>
+              {sortOptions.map((option) => (
+                <option key={option.value} value={option.value}>
+                  {option.label}
+                </option>
+              ))}
+            </select>
+          </label>
 
-        <button
-          className={pinMode ? 'pinModeButton active' : 'pinModeButton'}
-          type="button"
-          onClick={() => setPinMode((current) => !current)}
-          title="Kartlarda sabitleme düğmelerini göster/gizle"
-        >
-          📌 Pinle
-        </button>
+          <button
+            className={pinMode ? 'pinModeButton active' : 'pinModeButton'}
+            type="button"
+            onClick={() => setPinMode((current) => !current)}
+            title="Kartlarda sabitleme düğmelerini göster/gizle"
+          >
+            📌 Pinle
+          </button>
+        </div>
       </section>
 
       {isLoading ? (
