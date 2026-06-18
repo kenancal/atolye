@@ -2108,16 +2108,19 @@ function App() {
                 </div>
 
                 <div className="projectBody">
-                  <button
-                    className="projectLogo clickableLogo"
-                    type="button"
-                    onClick={(event) => openAssetMenu(event, 'projectLogo', project)}
-                    title="Logo seçenekleri"
-                  >
-                    {renderLogoContent(project)}
-                  </button>
+                  <div className="projectHead">
+                    <button
+                      className="projectLogo clickableLogo"
+                      type="button"
+                      onClick={(event) => openAssetMenu(event, 'projectLogo', project)}
+                      title="Logo seçenekleri"
+                    >
+                      {renderLogoContent(project)}
+                    </button>
 
-                  <h3 className="projectTitle">{project.title}</h3>
+                    <h3 className="projectTitle">{project.title}</h3>
+                  </div>
+
                   <p className="projectDescription">{project.description}</p>
                 </div>
               </article>
