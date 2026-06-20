@@ -1,3 +1,4 @@
+// Atölye — pano uygulaması
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import './App.css';
 import { supabase } from './lib/supabaseClient';
