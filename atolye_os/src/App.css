@@ -21,8 +21,8 @@
 
 /* Panonun en üstündeki büyük banner alanı */
 .appBanner {
-  margin: -20px -20px 18px;
-  height: 220px;
+  margin: -20px -20px 14px;
+  height: 150px;
   background-color: #f1f5f9;
   background-size: cover;
   background-position: center;
@@ -142,11 +142,10 @@ h1 {
 }
 
 .heroContent {
-  display: grid;
-  grid-template-columns: minmax(0, 1.35fr) minmax(260px, 0.65fr);
-  gap: 18px;
-  align-items: end;
-  padding-top: 32px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding-top: 14px;
 }
 
 .heroContent h2 {
@@ -168,8 +167,8 @@ h1 {
 
 .summaryGrid {
   display: grid;
-  grid-template-columns: 1fr;
-  gap: 8px;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
 }
 
 .summaryCard {
@@ -780,7 +779,9 @@ h1 {
 }
 
 .detailDrawer {
-  width: min(720px, 100%);
+  /* zoom: 0.8 her şeyi %20 küçültür; genişlik ona göre büyük tutuldu */
+  zoom: 0.8;
+  width: min(1500px, 96vw);
   max-height: 100%;
   min-width: 320px;
   min-height: 240px;
@@ -1002,11 +1003,15 @@ h1 {
   }
 
   .heroContent {
-    padding-top: 28px;
+    padding-top: 12px;
   }
 
   .heroContent h2 {
     font-size: 0.63rem;
+  }
+
+  .summaryGrid {
+    grid-template-columns: 1fr;
   }
 
   .projectGrid {

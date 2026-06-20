@@ -2527,10 +2527,8 @@ function App() {
                 }}
               >
                 <div
-                  className={`projectBanner clickableAsset ${project.bannerClass}`}
+                  className={`projectBanner ${project.bannerClass}`}
                   style={project.bannerUrl ? { backgroundImage: `url(${project.bannerUrl})` } : undefined}
-                  onClick={(event) => openAssetMenu(event, 'projectBanner', project)}
-                  title="Banner seçenekleri"
                 >
                   {(pinMode || project.pinned) && (
                     <button
@@ -2547,14 +2545,9 @@ function App() {
 
                 <div className="projectBody">
                   <div className="projectHead">
-                    <button
-                      className="projectLogo clickableLogo"
-                      type="button"
-                      onClick={(event) => openAssetMenu(event, 'projectLogo', project)}
-                      title="Logo seçenekleri"
-                    >
+                    <div className="projectLogo">
                       {renderLogoContent(project)}
-                    </button>
+                    </div>
 
                     <h3 className="projectTitle">{project.title}</h3>
                   </div>
