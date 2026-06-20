@@ -2226,8 +2226,8 @@ function App() {
 
     if (activeDetailTab === 'Reklam Fikirleri') {
       return (
-        <div className="adPanel">
-          <div className="adPanelHead">
+        <div className="reklamPanel">
+          <div className="reklamPanelHead">
             <p className="taskEmpty" style={{ margin: 0 }}>
               Her kart bir reklam fikri: görsel, video (bağlantı veya yükleme) ve senaryo.
             </p>
@@ -2243,16 +2243,16 @@ function App() {
           ) : adIdeas.length === 0 ? (
             <p className="taskEmpty">Bu proje için henüz reklam fikri yok. Yukarıdan ekle.</p>
           ) : (
-            <div className="adGrid">
+            <div className="reklamGrid">
               {adIdeas.map((idea) => (
-                <article className="adCard" key={idea.id}>
-                  <div className="adImageBox">
+                <article className="reklamCard" key={idea.id}>
+                  <div className="reklamImageBox">
                     {idea.image_url ? (
                       <img src={idea.image_url} alt="Reklam görseli" />
                     ) : (
-                      <div className="adImagePlaceholder">Görsel yok</div>
+                      <div className="reklamImagePlaceholder">Görsel yok</div>
                     )}
-                    <div className="adImageActions">
+                    <div className="reklamImageActions">
                       <button type="button" onClick={() => handleUploadAdImage(idea)}>
                         {idea.image_url ? 'Görseli Değiştir' : 'Görsel Yükle'}
                       </button>
@@ -2264,9 +2264,9 @@ function App() {
                     </div>
                   </div>
 
-                  <div className="adField">
+                  <div className="reklamField">
                     <label>Video</label>
-                    <div className="adVideoRow">
+                    <div className="reklamVideoRow">
                       <input
                         value={idea.video_url || ''}
                         onChange={(event) => updateAdIdeaField(idea.id, 'video_url', event.target.value)}
@@ -2277,13 +2277,13 @@ function App() {
                       </button>
                     </div>
                     {idea.video_url && (
-                      <a className="adVideoLink" href={idea.video_url} target="_blank" rel="noopener noreferrer">
+                      <a className="reklamVideoLink" href={idea.video_url} target="_blank" rel="noopener noreferrer">
                         Videoyu aç ↗
                       </a>
                     )}
                   </div>
 
-                  <div className="adField">
+                  <div className="reklamField">
                     <label>Senaryo</label>
                     <textarea
                       rows="4"
@@ -2293,7 +2293,7 @@ function App() {
                     />
                   </div>
 
-                  <div className="adCardActions">
+                  <div className="reklamCardActions">
                     <button className="secondaryButton" type="button" onClick={() => handleDeleteAdIdea(idea)}>
                       Sil
                     </button>
