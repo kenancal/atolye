@@ -91,6 +91,7 @@ const detailTabs = [
   'Bütçe',
   'Dosyalar',
   'Notlar',
+  'Reklam Fikirleri',
   'Marka & Domain',
   'Rakipler',
   'Yol Haritası',
@@ -226,6 +227,11 @@ function App() {
   const [isAddingNote, setIsAddingNote] = useState(false);
   const [editingNoteId, setEditingNoteId] = useState(null);
   const [editingNoteContent, setEditingNoteContent] = useState('');
+  const [adIdeas, setAdIdeas] = useState([]);
+  const [adIdeasLoading, setAdIdeasLoading] = useState(false);
+  const [adIdeasError, setAdIdeasError] = useState('');
+  const [isAddingAdIdea, setIsAddingAdIdea] = useState(false);
+  const [savingAdIdeaId, setSavingAdIdeaId] = useState(null);
   const [roadmapItems, setRoadmapItems] = useState([]);
   const [roadmapLoading, setRoadmapLoading] = useState(false);
   const [roadmapError, setRoadmapError] = useState('');
@@ -557,6 +563,163 @@ function App() {
       setNotesError(`Not silinemedi: ${error.message}`);
       setProjectNotes(previousNotes);
     }
+  }
+
+  // --- Reklam Fikirleri ---
+  const fetchAdIdeas = useCallback(async (projectId) => {
+    setAdIdeasLoading(true);
+    setAdIdeasError('');
+
+    const { data, error } = await supabase
+      .from('project_ad_ideas')
+      .select('*')
+      .eq('project_id', projectId)
+      .order('created_at', { ascending: false });
+
+    if (error) {
+      setAdIdeasError(`Reklam fikirleri yüklenemedi: ${error.message}`);
+      setAdIdeas([]);
+      setAdIdeasLoading(false);
+      return;
+    }
+
+    setAdIdeas(data || []);
+    setAdIdeasLoading(false);
+  }, []);
+
+  useEffect(() => {
+    if (selectedProject && activeDetailTab === 'Reklam Fikirleri') {
+      fetchAdIdeas(selectedProject.id);
+    } else {
+      setAdIdeas([]);
+      setAdIdeasError('');
+    }
+  }, [selectedProject, activeDetailTab, fetchAdIdeas]);
+
+  function chooseVideoFile() {
+    return new Promise((resolve) => {
+      const input = document.createElement('input');
+      input.type = 'file';
+      input.accept = 'video/mp4,video/webm,video/quicktime,video/x-matroska';
+      input.onchange = () => resolve(input.files?.[0] || null);
+      input.click();
+    });
+  }
+
+  async function handleAddAdIdea() {
+    if (!selectedProject || isAddingAdIdea) return;
+
+    setIsAddingAdIdea(true);
+    setAdIdeasError('');
+
+    const { data, error } = await supabase
+      .from('project_ad_ideas')
+      .insert({ project_id: selectedProject.id, scenario: '', video_url: null, image_url: null })
+      .select()
+      .single();
+
+    if (error) {
+      setAdIdeasError(`Fikir eklenemedi: ${error.message}`);
+      setIsAddingAdIdea(false);
+      return;
+    }
+
+    setAdIdeas((current) => [data, ...current]);
+    setIsAddingAdIdea(false);
+  }
+
+  function updateAdIdeaField(id, field, value) {
+    setAdIdeas((current) => current.map((item) => (item.id === id ? { ...item, [field]: value } : item)));
+  }
+
+  async function handleSaveAdIdea(idea) {
+    setSavingAdIdeaId(idea.id);
+    setAdIdeasError('');
+
+    const { error } = await supabase
+      .from('project_ad_ideas')
+      .update({ scenario: idea.scenario || '', video_url: idea.video_url?.trim() || null })
+      .eq('id', idea.id);
+
+    if (error) {
+      setAdIdeasError(`Kaydedilemedi: ${error.message}`);
+    }
+
+    setSavingAdIdeaId(null);
+  }
+
+  async function handleDeleteAdIdea(idea) {
+    const previous = adIdeas;
+    setAdIdeas((current) => current.filter((item) => item.id !== idea.id));
+
+    const { error } = await supabase.from('project_ad_ideas').delete().eq('id', idea.id);
+
+    if (error) {
+      setAdIdeasError(`Silinemedi: ${error.message}`);
+      setAdIdeas(previous);
+      return;
+    }
+
+    // Yüklenmiş görsel/video dosyalarını storage'dan temizle (best-effort)
+    await removeFileFromStorage(idea.image_url);
+    await removeFileFromStorage(idea.video_url);
+  }
+
+  async function handleUploadAdImage(idea) {
+    const file = await chooseImageFile();
+    if (!file) return;
+
+    setSavingAdIdeaId(idea.id);
+    setAdIdeasError('');
+
+    try {
+      const publicUrl = await uploadFileToStorage(file, 'adimages');
+      const { error } = await supabase
+        .from('project_ad_ideas')
+        .update({ image_url: publicUrl })
+        .eq('id', idea.id);
+      if (error) throw new Error(error.message);
+
+      const previousUrl = idea.image_url;
+      updateAdIdeaField(idea.id, 'image_url', publicUrl);
+      await removeFileFromStorage(previousUrl);
+    } catch (error) {
+      setAdIdeasError(`Görsel yüklenemedi: ${error.message}`);
+    } finally {
+      setSavingAdIdeaId(null);
+    }
+  }
+
+  async function handleUploadAdVideo(idea) {
+    const file = await chooseVideoFile();
+    if (!file) return;
+
+    setSavingAdIdeaId(idea.id);
+    setAdIdeasError('');
+
+    try {
+      const publicUrl = await uploadFileToStorage(file, 'advideos');
+      const { error } = await supabase
+        .from('project_ad_ideas')
+        .update({ video_url: publicUrl })
+        .eq('id', idea.id);
+      if (error) throw new Error(error.message);
+
+      const previousUrl = idea.video_url;
+      updateAdIdeaField(idea.id, 'video_url', publicUrl);
+      if (previousUrl && previousUrl !== publicUrl) await removeFileFromStorage(previousUrl);
+    } catch (error) {
+      setAdIdeasError(`Video yüklenemedi: ${error.message}`);
+    } finally {
+      setSavingAdIdeaId(null);
+    }
+  }
+
+  async function handleRemoveAdImage(idea) {
+    const previousUrl = idea.image_url;
+    updateAdIdeaField(idea.id, 'image_url', null);
+    await supabase.from('project_ad_ideas').update({ image_url: null }).eq('id', idea.id);
+    await removeFileFromStorage(previousUrl);
   }
 
   const fetchRoadmap = useCallback(async (projectId) => {
@@ -2055,6 +2218,96 @@ function App() {
                 </li>
               ))}
             </ul>
+          )}
+        </div>
+      );
+    }
+
+    if (activeDetailTab === 'Reklam Fikirleri') {
+      return (
+        <div className="adPanel">
+          <div className="adPanelHead">
+            <p className="taskEmpty" style={{ margin: 0 }}>
+              Her kart bir reklam fikri: görsel, video (bağlantı veya yükleme) ve senaryo.
+            </p>
+            <button className="primaryButton" type="button" onClick={handleAddAdIdea} disabled={isAddingAdIdea}>
+              {isAddingAdIdea ? 'Ekleniyor...' : '+ Yeni reklam fikri'}
+            </button>
+          </div>
+
+          {adIdeasError && <div className="errorBanner">{adIdeasError}</div>}
+
+          {adIdeasLoading ? (
+            <p className="taskEmpty">Reklam fikirleri yükleniyor...</p>
+          ) : adIdeas.length === 0 ? (
+            <p className="taskEmpty">Bu proje için henüz reklam fikri yok. Yukarıdan ekle.</p>
+          ) : (
+            <div className="adGrid">
+              {adIdeas.map((idea) => (
+                <article className="adCard" key={idea.id}>
+                  <div className="adImageBox">
+                    {idea.image_url ? (
+                      <img src={idea.image_url} alt="Reklam görseli" />
+                    ) : (
+                      <div className="adImagePlaceholder">Görsel yok</div>
+                    )}
+                    <div className="adImageActions">
+                      <button type="button" onClick={() => handleUploadAdImage(idea)}>
+                        {idea.image_url ? 'Görseli Değiştir' : 'Görsel Yükle'}
+                      </button>
+                      {idea.image_url && (
+                        <button type="button" onClick={() => handleRemoveAdImage(idea)}>
+                          Kaldır
+                        </button>
+                      )}
+                    </div>
+                  </div>
+
+                  <div className="adField">
+                    <label>Video</label>
+                    <div className="adVideoRow">
+                      <input
+                        value={idea.video_url || ''}
+                        onChange={(event) => updateAdIdeaField(idea.id, 'video_url', event.target.value)}
+                        placeholder="Video bağlantısı (YouTube/Vimeo…) ya da yükle"
+                      />
+                      <button type="button" onClick={() => handleUploadAdVideo(idea)}>
+                        Video Yükle
+                      </button>
+                    </div>
+                    {idea.video_url && (
+                      <a className="adVideoLink" href={idea.video_url} target="_blank" rel="noopener noreferrer">
+                        Videoyu aç ↗
+                      </a>
+                    )}
+                  </div>
+
+                  <div className="adField">
+                    <label>Senaryo</label>
+                    <textarea
+                      rows="4"
+                      value={idea.scenario || ''}
+                      onChange={(event) => updateAdIdeaField(idea.id, 'scenario', event.target.value)}
+                      placeholder="Reklam senaryosu / metni…"
+                    />
+                  </div>
+
+                  <div className="adCardActions">
+                    <button className="secondaryButton" type="button" onClick={() => handleDeleteAdIdea(idea)}>
+                      Sil
+                    </button>
+                    <button
+                      className="primaryButton"
+                      type="button"
+                      onClick={() => handleSaveAdIdea(idea)}
+                      disabled={savingAdIdeaId === idea.id}
+                    >
+                      {savingAdIdeaId === idea.id ? 'Kaydediliyor...' : 'Kaydet'}
+                    </button>
+                  </div>
+                </article>
+              ))}
+            </div>
           )}
         </div>
       );

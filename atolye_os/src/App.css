@@ -2073,3 +2073,135 @@ a.researchNote:hover {
   background: #fee2e2;
   color: #b91c1c;
 }
+
+/* Reklam Fikirleri sekmesi */
+.adPanel {
+  padding: 4px 24px 24px;
+}
+
+.adPanelHead {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-bottom: 14px;
+}
+
+.adGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 14px;
+}
+
+.adCard {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  border: 1px solid rgba(15, 23, 42, 0.08);
+  border-radius: 16px;
+  padding: 12px;
+  background: #ffffff;
+  box-shadow: 0 8px 22px rgba(15, 23, 42, 0.05);
+}
+
+.adImageBox {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.adImageBox img {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+  border-radius: 12px;
+  background: #f1f5f9;
+}
+
+.adImagePlaceholder {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  display: grid;
+  place-items: center;
+  border-radius: 12px;
+  background: #f1f5f9;
+  color: #94a3b8;
+  font-size: 0.85rem;
+  font-weight: 700;
+}
+
+.adImageActions,
+.adVideoRow {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.adImageActions button,
+.adVideoRow button {
+  border: 1px solid rgba(15, 23, 42, 0.12);
+  border-radius: 10px;
+  padding: 7px 10px;
+  background: #f8fafc;
+  color: #0f172a;
+  font-size: 0.78rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.adImageActions button:hover,
+.adVideoRow button:hover {
+  border-color: rgba(5, 150, 105, 0.4);
+}
+
+.adField {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.adField label {
+  font-size: 0.72rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: #64748b;
+}
+
+.adVideoRow input,
+.adField textarea {
+  width: 100%;
+  border: 1px solid rgba(15, 23, 42, 0.12);
+  border-radius: 12px;
+  padding: 10px 12px;
+  background: #ffffff;
+  color: #0f172a;
+  font: inherit;
+}
+
+.adVideoRow input {
+  flex: 1;
+  min-width: 0;
+}
+
+.adField textarea {
+  resize: vertical;
+}
+
+.adVideoLink {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: #047857;
+  text-decoration: none;
+}
+
+.adVideoLink:hover {
+  text-decoration: underline;
+}
+
+.adCardActions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+}
