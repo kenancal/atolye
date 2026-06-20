@@ -208,6 +208,12 @@ function App() {
   const [brandLogo, setBrandLogo] = useState('A');
   const [brandLogoUrl, setBrandLogoUrl] = useState('');
   const [appBannerUrl, setAppBannerUrl] = useState('');
+  const [researchOpen, setResearchOpen] = useState(false);
+  const [researchTopics, setResearchTopics] = useState([]);
+  const [researchTitle, setResearchTitle] = useState('');
+  const [researchNote, setResearchNote] = useState('');
+  const [isAddingResearch, setIsAddingResearch] = useState(false);
+  const [researchError, setResearchError] = useState('');
   const [projectTasks, setProjectTasks] = useState([]);
   const [tasksLoading, setTasksLoading] = useState(false);
   const [tasksError, setTasksError] = useState('');
@@ -282,6 +288,81 @@ function App() {
   useEffect(() => {
     fetchBrandLogo();
   }, [fetchBrandLogo]);
+
+  const fetchResearchTopics = useCallback(async () => {
+    setResearchError('');
+    const { data, error } = await supabase
+      .from('research_topics')
+      .select('*')
+      .order('created_at', { ascending: true });
+
+    if (error) {
+      setResearchError(`Konular yüklenemedi: ${error.message}`);
+      return;
+    }
+
+    setResearchTopics(data || []);
+  }, []);
+
+  useEffect(() => {
+    if (researchOpen) {
+      fetchResearchTopics();
+    }
+  }, [researchOpen, fetchResearchTopics]);
+
+  async function handleAddResearchTopic(event) {
+    event.preventDefault();
+    const title = researchTitle.trim();
+    if (!title || isAddingResearch) return;
+
+    setIsAddingResearch(true);
+    setResearchError('');
+
+    const { data, error } = await supabase
+      .from('research_topics')
+      .insert({ title, note: researchNote.trim() || null })
+      .select()
+      .single();
+
+    if (error) {
+      setResearchError(`Konu eklenemedi: ${error.message}`);
+      setIsAddingResearch(false);
+      return;
+    }
+
+    setResearchTopics((current) => [...current, data]);
+    setResearchTitle('');
+    setResearchNote('');
+    setIsAddingResearch(false);
+  }
+
+  async function handleToggleResearchTopic(topic) {
+    const nextDone = !topic.is_done;
+    setResearchTopics((current) =>
+      current.map((item) => (item.id === topic.id ? { ...item, is_done: nextDone } : item))
+    );
+
+    const { error } = await supabase
+      .from('research_topics')
+      .update({ is_done: nextDone })
+      .eq('id', topic.id);
+
+    if (error) {
+      setResearchTopics((current) =>
+        current.map((item) => (item.id === topic.id ? { ...item, is_done: topic.is_done } : item))
+      );
+      setResearchError(`Güncellenemedi: ${error.message}`);
+    }
+  }
+
+  async function handleDeleteResearchTopic(topic) {
+    setResearchTopics((current) => current.filter((item) => item.id !== topic.id));
+    const { error } = await supabase.from('research_topics').delete().eq('id', topic.id);
+    if (error) {
+      setResearchError(`Silinemedi: ${error.message}`);
+      fetchResearchTopics();
+    }
+  }
 
   const fetchTasks = useCallback(async (projectId) => {
     setTasksLoading(true);
@@ -2086,6 +2167,9 @@ function App() {
           </div>
 
           <div className="topBarActions">
+            <button className="secondaryButton" type="button" onClick={() => setResearchOpen(true)}>
+              🔎 Araştırılacak Konular
+            </button>
             <button className="secondaryButton" type="button" onClick={handleSignOut}>
               Çıkış
             </button>
@@ -2557,6 +2641,77 @@ function App() {
 
             <p>{assetPreview.description}</p>
           </section>
+        </div>
+      )}
+
+      {researchOpen && (
+        <div className="researchView">
+          <header className="researchHeader">
+            <div>
+              <p className="eyebrow">Araştırma</p>
+              <h2>Araştırılacak Konular</h2>
+            </div>
+            <button className="secondaryButton" type="button" onClick={() => setResearchOpen(false)}>
+              ← Panoya dön
+            </button>
+          </header>
+
+          {researchError && <div className="errorBanner">{researchError}</div>}
+
+          <form className="researchForm" onSubmit={handleAddResearchTopic}>
+            <input
+              className="researchTitleInput"
+              value={researchTitle}
+              onChange={(event) => setResearchTitle(event.target.value)}
+              placeholder="Araştırılacak konu (ör. Vakum tüplü kolektör tedarikçileri)"
+            />
+            <input
+              className="researchNoteInput"
+              value={researchNote}
+              onChange={(event) => setResearchNote(event.target.value)}
+              placeholder="Not / bağlantı (isteğe bağlı)"
+            />
+            <button className="primaryButton" type="submit" disabled={isAddingResearch}>
+              {isAddingResearch ? 'Ekleniyor...' : '+ Ekle'}
+            </button>
+          </form>
+
+          <ul className="researchList">
+            {researchTopics.length === 0 && (
+              <li className="researchEmpty">Henüz konu eklenmedi. Yukarıdan ekleyebilirsin.</li>
+            )}
+            {researchTopics.map((topic) => (
+              <li key={topic.id} className={topic.is_done ? 'researchItem done' : 'researchItem'}>
+                <label className="researchCheck">
+                  <input
+                    type="checkbox"
+                    checked={topic.is_done}
+                    onChange={() => handleToggleResearchTopic(topic)}
+                  />
+                </label>
+                <div className="researchBody">
+                  <span className="researchItemTitle">{topic.title}</span>
+                  {topic.note &&
+                    (/^https?:\/\//i.test(topic.note) ? (
+                      <a className="researchNote" href={topic.note} target="_blank" rel="noopener noreferrer">
+                        {topic.note}
+                      </a>
+                    ) : (
+                      <span className="researchNote">{topic.note}</span>
+                    ))}
+                </div>
+                <button
+                  className="researchDelete"
+                  type="button"
+                  onClick={() => handleDeleteResearchTopic(topic)}
+                  aria-label="Sil"
+                  title="Sil"
+                >
+                  ×
+                </button>
+              </li>
+            ))}
+          </ul>
         </div>
       )}
     </main>
