@@ -773,7 +773,7 @@ h1 {
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 24px;
+  padding: 8px;
   background: rgba(15, 23, 42, 0.42);
   backdrop-filter: blur(10px);
 }
@@ -782,9 +782,9 @@ h1 {
   /* zoom: 0.8 her şeyi %20 küçültür; genişlik ona göre büyük tutuldu */
   position: relative;
   zoom: 0.8;
-  width: min(1500px, 96vw);
-  height: 92vh;
-  max-height: 92vh;
+  width: min(1900px, 98vw);
+  height: 99vh;
+  max-height: 99vh;
   min-width: 320px;
   max-width: 100%;
   border-radius: 24px;
