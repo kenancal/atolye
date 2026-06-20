@@ -780,6 +780,7 @@ h1 {
 
 .detailDrawer {
   /* zoom: 0.8 her şeyi %20 küçültür; genişlik ona göre büyük tutuldu */
+  position: relative;
   zoom: 0.8;
   width: min(1500px, 96vw);
   height: 92vh;
@@ -787,11 +788,37 @@ h1 {
   min-width: 320px;
   max-width: 100%;
   border-radius: 24px;
-  overflow: auto;
-  resize: both;
+  overflow: hidden;
   background: #ffffff;
   box-shadow: 0 40px 90px rgba(15, 23, 42, 0.3);
 }
+
+/* İçerik kaydırma katmanı (tutamaçlar kaymaz) */
+.detailScroll {
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+}
+
+/* Sekme altı içeriği %15 büyüt */
+.detailTabContent {
+  zoom: 1.15;
+}
+
+/* Her kenardan bağımsız boyutlandırma tutamaçları */
+.rsz {
+  position: absolute;
+  z-index: 6;
+}
+
+.rsz-n { top: 0; left: 16px; right: 16px; height: 7px; cursor: ns-resize; }
+.rsz-s { bottom: 0; left: 16px; right: 16px; height: 7px; cursor: ns-resize; }
+.rsz-e { right: 0; top: 16px; bottom: 16px; width: 7px; cursor: ew-resize; }
+.rsz-w { left: 0; top: 16px; bottom: 16px; width: 7px; cursor: ew-resize; }
+.rsz-ne { top: 0; right: 0; width: 16px; height: 16px; cursor: nesw-resize; }
+.rsz-nw { top: 0; left: 0; width: 16px; height: 16px; cursor: nwse-resize; }
+.rsz-se { bottom: 0; right: 0; width: 16px; height: 16px; cursor: nwse-resize; }
+.rsz-sw { bottom: 0; left: 0; width: 16px; height: 16px; cursor: nesw-resize; }
 
 .detailHero {
   position: relative;

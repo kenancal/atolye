@@ -1,5 +1,5 @@
 // Atölye — pano uygulaması
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import './App.css';
 import { supabase } from './lib/supabaseClient';
 
@@ -194,6 +194,7 @@ function App() {
   const [activeFilter, setActiveFilter] = useState('Tümü');
   const [sortBy, setSortBy] = useState('created');
   const [pinMode, setPinMode] = useState(false);
+  const detailDrawerRef = useRef(null);
   const [searchQuery, setSearchQuery] = useState('');
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalMode, setModalMode] = useState('create');
@@ -1173,6 +1174,72 @@ function App() {
   function openProjectDetail(project) {
     setSelectedProject(project);
     setActiveDetailTab('Genel Bakış');
+  }
+
+  // Detay penceresini her kenardan bağımsız boyutlandırma
+  function startDrawerResize(event, dir) {
+    event.preventDefault();
+    event.stopPropagation();
+    const drawer = detailDrawerRef.current;
+    if (!drawer) return;
+
+    const zoom = 0.8; // .detailDrawer zoom değeri
+    const startX = event.clientX;
+    const startY = event.clientY;
+    const rect = drawer.getBoundingClientRect();
+    let startW = rect.width / zoom;
+    let startH = rect.height / zoom;
+
+    let tx = 0;
+    let ty = 0;
+    const tr = /translate\((-?[\d.]+)px,\s*(-?[\d.]+)px\)/.exec(drawer.style.transform || '');
+    if (tr) {
+      tx = parseFloat(tr[1]);
+      ty = parseFloat(tr[2]);
+    }
+
+    function onMove(ev) {
+      const dx = (ev.clientX - startX) / zoom;
+      const dy = (ev.clientY - startY) / zoom;
+      let w = startW;
+      let h = startH;
+      let ntx = tx;
+      let nty = ty;
+
+      if (dir.includes('e')) {
+        w = startW + dx;
+        ntx = tx + dx / 2;
+      }
+      if (dir.includes('w')) {
+        w = startW - dx;
+        ntx = tx + dx / 2;
+      }
+      if (dir.includes('s')) {
+        h = startH + dy;
+        nty = ty + dy / 2;
+      }
+      if (dir.includes('n')) {
+        h = startH - dy;
+        nty = ty + dy / 2;
+      }
+
+      w = Math.max(320, w);
+      h = Math.max(240, h);
+
+      drawer.style.width = `${w}px`;
+      drawer.style.height = `${h}px`;
+      drawer.style.maxHeight = 'none';
+      drawer.style.maxWidth = 'none';
+      drawer.style.transform = `translate(${ntx}px, ${nty}px)`;
+    }
+
+    function onUp() {
+      window.removeEventListener('pointermove', onMove);
+      window.removeEventListener('pointerup', onUp);
+    }
+
+    window.addEventListener('pointermove', onMove);
+    window.addEventListener('pointerup', onUp);
   }
 
   function closeProjectDetail() {
@@ -2739,11 +2806,13 @@ function App() {
         <div className="detailOverlay" role="presentation" onMouseDown={closeProjectDetail}>
           <aside
             className="detailDrawer"
+            ref={detailDrawerRef}
             role="dialog"
             aria-modal="true"
             aria-labelledby="project-detail-title"
             onMouseDown={(event) => event.stopPropagation()}
           >
+            <div className="detailScroll">
             <div
               className={`detailHero clickableAsset ${selectedProject.bannerClass}`}
               style={selectedProject.bannerUrl ? { backgroundImage: `url(${selectedProject.bannerUrl})` } : undefined}
@@ -2811,7 +2880,17 @@ function App() {
               ))}
             </nav>
 
-            {renderDetailTabContent()}
+              <div className="detailTabContent">{renderDetailTabContent()}</div>
+            </div>
+
+            <span className="rsz rsz-n" onPointerDown={(event) => startDrawerResize(event, 'n')} />
+            <span className="rsz rsz-s" onPointerDown={(event) => startDrawerResize(event, 's')} />
+            <span className="rsz rsz-e" onPointerDown={(event) => startDrawerResize(event, 'e')} />
+            <span className="rsz rsz-w" onPointerDown={(event) => startDrawerResize(event, 'w')} />
+            <span className="rsz rsz-ne" onPointerDown={(event) => startDrawerResize(event, 'ne')} />
+            <span className="rsz rsz-nw" onPointerDown={(event) => startDrawerResize(event, 'nw')} />
+            <span className="rsz rsz-se" onPointerDown={(event) => startDrawerResize(event, 'se')} />
+            <span className="rsz rsz-sw" onPointerDown={(event) => startDrawerResize(event, 'sw')} />
           </aside>
         </div>
       )}
